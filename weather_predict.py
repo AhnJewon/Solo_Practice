@@ -17,3 +17,6 @@ wdf = pd.contcat([wdf2021])
 
 wdf_2022 = pd.read_csv(wd_2022, encoding='cp949')
 
+md = {}
+for i, row in wdf.iterrows():
+    m, d, v = (int
