@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.svm import SVR
 from sklearn.model_selection import train_test_split
 
-weather = '/home/u1016/Solo_Practice/OBS_ASOS_TIM_2021.csv' 
+weather = './OBS_ASOS_TIM_2021.csv' 
 
 chungju = pd.read_csv(weather, encoding='cp949')
 print(chungju.head)
@@ -13,7 +13,7 @@ chungju.head()
 chungju = chungju[['기온(°C)']]
 print(chungju.head)
 
-forecast_out = 24
+forecast_out = 25
 chungju[['다음기온']] = chungju[['기온(°C)']].shift(-forecast_out)
 print(chungju.tail())
 
@@ -30,7 +30,7 @@ print(Y)
 
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2)
 
-svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
+svr_rbf = SVR(kernel='rbf', C=100, gamma=1, epsilon = 0.2)
 svr_rbf.fit(x_train, y_train)
 
 lr = LinearRegression()
@@ -57,11 +57,11 @@ cj_forecast['SVM Prediction'] = svm_prediction
 cj_forecast['LR Prediction'] = lr_prediction
 cj_forecast
 
-weather2 = '/home/u1016/Solo_Practice/OBS_ASOS_TIM_2022.csv'
+weather2 = './OBS_ASOS_TIM_2021.csv'
 ch_actual = pd.read_csv(weather2, encoding='cp949')
 ch_actual.head()
 ch_actual = ch_actual[['기온(°C)']]
-ch_actual = ch_actual[:24]
+ch_actual = ch_actual[-27:-2]
 
 actual = np.array(ch_actual['기온(°C)'])
 actual

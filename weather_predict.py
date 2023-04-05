@@ -44,3 +44,30 @@ from sklearn.linear_model import LinearRegression
 
 train_month = (wdf['month'] <= 11)
 test_month = (wdf['month'] >= 12)
+interval = 3
+
+def make_data (data):
+    x = []
+    y = []
+    temps = list(data['temperature'])
+    for i in range(len(temps)):
+        if i <= interval: continue
+        y.append(temps[i])
+        xa = []
+        for p in range(interval):
+            d = i + p - interval
+            xa.append(temps[d])
+    return (x, y)
+
+train_x, train_y = make_data(wdf[train_month])
+test_x, test_y = make_data(wdf[test_month])
+
+lr = LinearRegression(normalize = True)
+lr.fit(train_x, train_y)
+pre_y = lr.predict(test_x)
+
+plt.figure(figsize=(10,6), dpi = 100)
+plt.plot(test_y, c='r')
+plt.plot(pre_y, c='b')
+plt.savefig('1y_lr.png')
+plt.show()
