@@ -13,15 +13,19 @@ for i in range(2010,2023):
     globals()[f'wdf_{i}']['day'] = globals()[f'wdf_{i}']['date'].dt.day
     globals()[f'wdf_{i}'] = globals()[f'wdf_{i}'][['year','month','day','temperature','평균 풍속(m/s)','최대 순간 풍속(m/s)','최대 풍속(m/s)','평균 이슬점온도(°C)','평균 증기압(hPa)','평균 현지기압(hPa)','평균 해면기압(hPa)','가조시간(hr)','평균 전운량(1/10)','평균 중하층운량(1/10)','평균 지면온도(°C)','최저 초상온도(°C)']]
 
-wdf = pd.concat([wdf_2010,wdf_2011,wdf_2012,wdf_2013,wdf_2014,wdf_2015,wdf_2016,wdf_2017,wdf_2018,wdf_2019,wdf_2020,wdf_2021,wdf_2022])
-
+wdf = pd.concat([wdf_2010,wdf_2011,wdf_2012,wdf_2013,wdf_2014,wdf_2015,wdf_2016,wdf_2017,wdf_2018,wdf_2019,wdf_2020,wdf_2021])
+lastest_year = 
 wdf = wdf.dropna()
 
 print(wdf)
 
 feature = wdf[['year','month','day','평균 풍속(m/s)','최대 순간 풍속(m/s)','최대 풍속(m/s)','평균 이슬점온도(°C)','평균 증기압(hPa)','평균 현지기압(hPa)','평균 해면기압(hPa)','가조시간(hr)','평균 전운량(1/10)','평균 중하층운량(1/10)','평균 지면온도(°C)','최저 초상온도(°C)']]
 target = wdf[['temperature']]
-feature_val = (feature['year']<=2021)
+
+feature_val = (feature['year']>=2022)
+target_val = (target['year']>=2022)
+
+
 
 X = tf.keras.layers.Input(shape=[15]) #feature 개수
 H = tf.keras.layers.Dense(20, activation='swish')(X) #hidden layer node 개수:20 layer 개수는 본 코드(H = ...)의 수
