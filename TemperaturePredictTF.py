@@ -1,5 +1,6 @@
 import pandas as pd
 import tensorflow as tf
+import mtplotlip.pyplot as plt
 
 for i in range(2010,2023):
     	
@@ -21,12 +22,43 @@ feature = wdf[['year','month','day','평균 풍속(m/s)','최대 순간 풍속(m
 target = wdf[['temperature']]
 
 X = tf.keras.layers.Input(shape=[15]) #feature 개수
-H = tf.keras.layers.Dense(10, activation='swish')(X) #hidden layer node 개수:10 layer 개수는 본 코드(H = ...)의 수
-Y = tf.keras.layers.Dense(1)(H)
+H = tf.keras.layers.Dense(20, activation='swish')(X) #hidden layer node 개수:20 layer 개수는 본 코드(H = ...)의 수
+H1 = tf.keras.layers.Dense(20, activation='swish')(H)
+H2 = tf.keras.layers.Dense(20, activation='swish')(H1)
+H3 = tf.keras.layers.Dense(20, activation='swish')(H2)
+
+
+
+Y = tf.keras.layers.Dense(1)(H3)
 model = tf.keras.models.Model(X,Y) 
 model.compile(optimizer = 'adam', loss='mean_squared_error', metrics=['acc'], run_eagerly = True)
 
 
-model.fit(feature, target, epochs=1000, verbose=0) #epochs: 학습 횟수, verbose:학습과정 출력 여부
+history = model.fit(feature, target, epochs=10, verbose='auto') #epochs: 학습 횟수, verbose:학습과정 출력 여부
 
-model.predict(feature)
+print(model.predict(feature))
+
+
+history_dict = history.history
+loss = history_dic['loss']
+val_loss = history_dict['val_loss']
+
+epochs = range(1,len(loss) +1)
+plt.plot(epochs, loss, 'bo' label = 'Training loss')
+plt.plot(epochs, val_loss, 'b', label = 'Validation loss')
+plt.title('Teaining and Validation loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.show()
+
+plt.clf()
+acc = history_dict['acc']
+val_acc = history_dict['val_acc']
+
+plt.plot(epochs, acc, 'bo' label = 'Training acc')
+plt.plot(epochs, val_acc, 'b', label = 'Validation acc')
+plt.title('Teaining and Validation accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.show()
+
